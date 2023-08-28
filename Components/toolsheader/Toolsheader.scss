@@ -1,0 +1,147 @@
+@import "../../mixins.scss";
+
+.Toolsheader {
+  position: fixed;
+  transform: translateY(0);
+  width: 100%;
+  height: 60px;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: black;
+
+  transition: all ease 0.5s;
+  z-index: 2;
+  &.top {
+    background: transparent;
+  }
+  &.show {
+    background: rgba(0, 0, 0, 1);
+  }
+  &.hide {
+    background: rgba(0, 0, 0, 1);
+  }
+  
+ 
+
+  .logo {
+    cursor: pointer;
+    img {
+      height: 26px;
+      padding-top: 2px;
+      margin-top: 3px;
+    }
+  }
+  .menuItems {
+    display: flex;
+    list-style-type: none;
+    display: none;
+    align-items: center;
+
+    flex-direction: row;
+    
+
+    @include md {
+      display: flex;
+      justify-content: center;
+      align-self: center;
+      align-items: center;
+      flex-direction: row;
+      margin-top: 40px;
+    }
+
+    .menuItem {
+      height: 60px;
+      display: flex;
+      align-items: start;
+      margin: 0 15px;
+      color: black;
+      font-weight: 500;
+      position: relative;
+
+      svg {
+        font-size: 18px;
+      }
+      cursor: pointer;
+      &:hover {
+        color: var(--pink);
+      }
+    }
+  }
+ 
+
+  .mobileMenuItems {
+    display: flex;
+    align-items: end;
+    margin-left: 11rem;
+
+    @include md {
+      display: none;
+    }
+    svg {
+      font-size: 28px;
+      color: white;
+    }
+  }
+
+  &.mobileView {
+    background: var(--black3);
+    .menuItems {
+      display: flex;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      background: var(--black3);
+      flex-direction: column;
+      width: 100%;
+      padding: 20px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      animation: mobileMenu 0.3s ease forwards;
+      .lin:hover {
+        color: var(--pink);
+      }
+      .menuItem {
+        font-size: 20px;
+        width: 100%;
+        height: auto;
+        padding: 15px 30px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  }
+}
+.Toolsheader.scroll-active {
+    .menuItems li {
+      color: white;
+    }
+  }
+
+
+  .Toolsheader.mobileView {
+    .mobileMenuItems svg {
+       /* Initial color should be black */
+    }
+  
+    .menuItems li {
+      color: white; /* Menu items should be white */
+    }
+  
+    // Rest of your styles...
+  }
+
+
+
+@keyframes mobileMenu {
+  0% {
+    transform: translateY(-130%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

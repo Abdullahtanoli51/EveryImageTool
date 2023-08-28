@@ -1,0 +1,20 @@
+@media (max-width: 768px) {
+
+    .tools-section{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+    }
+}
+.shadow-card {
+     /* JUST TO LOOK COOL */
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px;
+    transition: all .3s ease-in-out;
+  }
+  
+  .shadow-card:hover {
+    box-shadow: rgba(0, 0, 0, 0.22) 0px 30px 60px;
+    transform: translate3d(0px, -3px, 0px);
+  }
