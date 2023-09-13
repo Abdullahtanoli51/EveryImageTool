@@ -8,7 +8,7 @@
 float: none;
 position: static;
 font-family: "TT Interphases Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-font-size: 72px;
+font-size: 72px;  
 line-height: 79.2px;
 }
 .page-header__text{
@@ -19,16 +19,16 @@ font-family: "TT Interphases Pro", system-ui, -apple-system, BlinkMacSystemFont,
 font-size: 20px;
 line-height: 30px;
 }
-.dropzone-card {
+.dropzone-card1 {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 370px;
-  width: 580px;
+  width: 596px;
   max-width: 100%;
   max-height: 100%;
 
-  border: 2px dashed transparent;
+  border: 3px dashed transparent;
   border-radius: 10px;
 
   cursor: pointer;

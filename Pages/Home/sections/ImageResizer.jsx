@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import "./vision.scss";
-export default function CreativeVisionOne() {
+export default function ImageResizer() {
   return (
     <>
       <div
@@ -13,24 +12,21 @@ export default function CreativeVisionOne() {
               <div className="pr-48 lg:pr-0">
                 <div className="sectionHeading ">
                   <div className="sectionHeading__subtitle">
-                    <span>Creative Vision</span>
+                   
                   </div>
-                  <h2 className="sectionHeading__title pt-10">
-                    Remove Background
+                  <h2 className="sectionHeading__title pt-60">
+                    Resize Images
                   </h2>
                   <p className="sectionHeading__text mt-20">
-                    Create high quality visual assets with just one click, for
-                    free! The one-click visual creator Photomash Studio
-                    instantly removes backgrounds from your photos to create
-                    amazing profile pictures, product images, Youtube thumbnails
-                    and more..
+                   Image Resizer is a tool designed to swiftly resize your images. It offers efficient bulk image resizing while ensuring 100% image quality.
+
                   </p>
                 </div>
                 <Link
-                  href="/about/about-1"
+                  to="/image-resizer"
                   className="button -md rounded-8 -light-accent text-accent mt-20 "
                 >
-                  About Us
+                    Resize Image
                 </Link>
               </div>
             </div>

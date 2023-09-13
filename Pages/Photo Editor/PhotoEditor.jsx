@@ -58,30 +58,42 @@ const PhotoEditor = () => {
   return (
     <>
       <ToolsHeader></ToolsHeader>
-      <div className="H">
-      <div className="Compress mb-20 ">
-      
-      
-        
-        <section className="mt-60 -text -">
-          <div className="mt-30">
+      <div className="H" style={{ overflow: "hidden" }}>
+      <section className="mt-20 -text -">
+          <div className="mt-40  sm:pt-30">
             <div className="page-header__content">
               <div className="row justify-center text-center">
-                <div className="col-xl-6 col-lg-9 col-md-10 pb-20">
-                  <div>
-                    <h1 className="sectionHeading__title ">Photo Editor</h1>
+                <div className="col-12 text-center">
+                  <div className="sectionHeading ">
+                    <h2
+                      className="sectionHeading__title"
+                      style={{ fontSize: "42px" }}
+                    >
+                      Photo Editor
+                    </h2>
                   </div>
                 </div>
                 <div className="w-1/1" />
                 <div className="col-xl-5 col-lg-9 col-md-10 ">
-                  <div className="px-20">
-                    
-                  </div>
+                  <div className="px-20"></div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+      <div className="Compress  ">
+      <div className="atropos  js-atropos">
+            <div className="atropos-scale">
+              <div className="md:d-none absolute-full-center z-2 ml-60 ">
+                <img
+                  className="float-animation w-1/1 h-1/3 object-fit-cover "
+                  src="/img/home-2/tabs/shapes.png"
+                  alt="image"
+                />
+              </div>
+            </div>
+          </div>      
+      
         <div className="wrapper">
           {uploadedFiles.length === 0 ? (
             <div

@@ -48,7 +48,7 @@ export default function Footer() {
                     <div className="footer__content__item">
                       <button
                         className="decoration-none text-primary"
-                        onClick={() => Navigate("/Blog")}
+                        onClick={() => Navigate("/blog")}
                       >
                         Blog
                       </button>
@@ -161,7 +161,8 @@ export default function Footer() {
             <div className="row justify-center py-30 mt-40">
               <div className="col-auto">
                 <div className="footer__bottom_text">
-                  © Copyright 2023. Sassio - NextJS template by AliThemes
+                  
+                  © Copyright 2023. Lorem Ipsum - with ❤️ by <Link to="https://devlints.com/" target="_blank" style={{textDecoration:"none"}}>Devlints</Link>
                 </div>
               </div>
             </div>

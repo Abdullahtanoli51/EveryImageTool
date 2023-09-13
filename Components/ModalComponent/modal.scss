@@ -1,0 +1,145 @@
+/* Style for the modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease-in-out; /* Add a fade-in/fade-out transition effect */
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* Style for the modal content */
+  .modal-content {
+    background-color: white;
+    width: 100%;
+    max-width: 600px; /* Set a maximum width for larger screens */
+    min-height: 350px; /* Set a minimum height */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transform: translateY(-50%); /* Start off-screen above */
+    transition: transform 0.3s ease; /* Add transition effect for transform */
+  }
+  
+  /* Apply modal content styles when it's open */
+  .modal-content.isOpen {
+    transform: translateY(0); /* Slide into view */
+  }
+  
+  /* Style for the heading inside the modal */
+  .modal-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Style for the modal body */
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    padding: 1.5rem;
+  }
+  
+  /* Style for the input container */
+  .input-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .disabled-button {
+    background-color: #ccc; /* Change to the desired dull color */
+    cursor: not-allowed !important; /* Use !important */
+  }
+  
+  /* Style for the input field */
+  .input-field {
+    width: 100%;
+    padding: 15px;
+    background-color: #f5f5fa;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.3s ease;
+    background-image: linear-gradient(to right, transparent 95%); /* Background gradient with icon on the right */
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) center; /* Adjust the position of the icon */
+  }
+  
+  /* Style for the TfiWorld icon */
+  .input-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust the position of the icon */
+    transform: translateY(-50%);
+    font-size: 20px; /* Adjust the icon size */
+    color: #555; /* Adjust the icon color */
+  }
+  
+  /* Style for the input field when focused */
+  .input-field:focus {
+    border: 1px solid #007bff;
+  }
+  
+  /* Style for the buttons at the bottom of the modal */
+  .modal-content button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for the cancel button */
+  .modal-content button.cancel-button {
+    background-color: grey;
+    color: #fff;
+  }
+  
+  /* Style for the save button */
+  .modal-content button.save-button {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Style for the modal header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Style for the close button */
+  .close-button {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  /* Style for the close icon (the "X" character) */
+  .close-icon {
+    font-size: 17px;
+    color: #333; /* Default color */
+    transition: color 0.3s ease; /* Add transition effect for color change */
+  }
+  
+  /* Change the color on hover */
+  .close-button:hover .close-icon {
+    color: red;
+  }
+
+  @media (max-width: 768px) {
+    /* Adjust the vertical positioning for the close icon */
+    .close-icon {
+      transform: translateY(-30px); /* Adjust the translateY value as needed */
+    }
+  }
+  

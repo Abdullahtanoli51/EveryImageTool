@@ -20,7 +20,7 @@ const ToolsHeader = () => {
   }, [location]);
 
   const controlNavBar = () => {
-    if (window.scrollY >100) {
+    if (window.scrollY >10) {
       if (window.scrollY > lastScrollY && !mobileMenu) {
         setShow("hide");
       } else {

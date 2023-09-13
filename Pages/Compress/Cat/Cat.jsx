@@ -4,7 +4,7 @@ import * as Icon from 'react-feather';
 export default function Cta() {
     return (
         <>
-            <section className="pt-80 pb-80   mb-60 card rounded-30 border-0  " style={{margin:"3rem" ,backgroundColor:"#b19fdf",zIndex:"-10"}}>
+            <section className="pt-80 pb-80   mb-60 card rounded-30 border-0  w-auto  " style={{margin:"3rem" ,backgroundColor:"#b19fdf",zIndex:"-10"}}>
                 <div className="absolute-full-center px-60 lg:px-24 sm:px-0 ">
                     <div className="bg-image rounded-30 js-lazy "  />
                 </div>
@@ -27,9 +27,9 @@ export default function Cta() {
                         <div className="col-lg-8">
                             <div>
                                 <div className="sectionHeading ">
-                                    <h2 className="sectionHeading__title ">Open a Sassio account <br className="md:d-none" />in a few minutes</h2>
+                                    <h2 className="sectionHeading__title ">Download Mobile App<br></br> Now</h2>
                                 </div>
-                                <p className="mt-4">Join the more than 400,000 users</p>
+                                <p className="mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 
                                 <div className="row y-gap-10 px-120 sm:px-0 mt-32">
                                     <div className="col-auto  ">

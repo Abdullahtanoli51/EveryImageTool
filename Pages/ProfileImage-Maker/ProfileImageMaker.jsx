@@ -1,8 +1,8 @@
 // Compress.js
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import "./Resize.scss"; // Import the stylesheet
-
+import "./Profile.scss"; // Import the stylesheet
+import RangeSlider from "react-bootstrap-range-slider";
 import LoadingSpinner from "../../Components/LoadingSpinner/LoadingSpinner";
 import CreativeProcessOne from "../Home/creativeProcess/CreativeProcess";
 import Steps from "./Steps/Steps";
@@ -13,10 +13,61 @@ import Cta from "./Cat/Cat";
 import Footer from "../../Components/Footer/Footer";
 import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
+import { Tabs } from "react-bootstrap";
+import { BiSolidImageAdd } from "react-icons/bi";
+
 const ProfileImageMaker = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [showOptionsCard, setShowOptionsCard] = useState(false);
+  const [value, setValue] = useState(0);
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
+  const newWidth = Math.round(imageWidth * (value / 100));
+  const newHeight = Math.round(imageHeight * (value / 100));
+  const [percentageValue, setPercentageValue] = useState(0);
+  const [newPixelWidth, setNewPixelWidth] = useState(imageWidth);
+  const [newPixelHeight, setNewPixelHeight] = useState(imageHeight);
+  const [uploadingIndex, setUploadingIndex] = useState(null); // Track the uploading image index
+  const [aspectRatioMaintained, setAspectRatioMaintained] = useState(true); // Default: Aspect ratio is maintained
+  const [loadingStates, setLoadingStates] = useState([]);
+  const colorOptions = [
+    "#FF5733",
+    "#FFC300",
+    "#FEAF02",
+    "#00A5A5",
+    "#477289",
+    "#B3C300",
+    "#AA33FF",
+    "#B7744D",
+    "#33FF57",
+    "#0088FF",
+    "#A284E9",
+    "#FF33AA",
+    "#16D5D1",
+    "#FF3388",
+    "#33AAFF",
+    "#8351D6",
+  ];
+  const [selectedColor, setSelectedColor] = useState(null);
+  const MAX_IMAGES = 5;
+  const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
+  const [fileTypeError, setFileTypeError] = useState(null);
+
+
+  const handleColorClick = (color) => {
+    setSelectedColor(color);
+  };
+
+  const handleOptionClick = (index) => {
+    setSelectedOption(index);
+  };
+  const handleTabClick = (tabIndex) => {
+    setActiveTab(tabIndex);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page when it loads
   }, []);
@@ -31,23 +82,96 @@ const ProfileImageMaker = () => {
       document.body.removeChild(link);
     }
   };
-
-  const handleEdit = () => {
-    // Logic for editing the uploaded image
-  };
-
-  const handleClear = () => {
-    setUploadedFiles([]);
-    setIsImageUploaded(false);
-  };
-
   const onDrop = (acceptedFiles) => {
-    setLoading(true);
-    setTimeout(() => {
-      setUploadedFiles(acceptedFiles);
-      setLoading(false);
-      setIsImageUploaded(true);
-    }, 1000);
+    if (uploadedFiles.length < MAX_IMAGES) {
+      setLoading(true);
+      setFileTypeError(null); // Clear any previous error messages
+
+      const newImages = acceptedFiles.slice(
+        0,
+        MAX_IMAGES - uploadedFiles.length
+      ); // Take only the first (5 - number of already uploaded images) images
+      const newLoadingStates = newImages.map(() => true);
+
+      // Check if each dropped file is an image
+      const isImage = newImages.every((file) => file.type.startsWith("image/"));
+
+      if (!isImage) {
+        // If any of the dropped files is not an image, show an error message
+        setFileTypeError("Please choose an image file.");
+        setLoading(false);
+        setTimeout(() => {
+          setFileTypeError(null);
+        }, 2000); // 5000 milliseconds (5 seconds)
+        return;
+      }
+
+      // Add the new images to the existing uploaded files
+      setUploadedFiles((prevUploadedFiles) => [
+        ...prevUploadedFiles,
+        ...newImages,
+      ]);
+
+      // Add the loading states for the new images
+      setLoadingStates((prevLoadingStates) => [
+        ...prevLoadingStates,
+        ...newLoadingStates,
+      ]);
+
+      // Process each image in the newImages array
+      Promise.all(
+        newImages.map((file, index) => {
+          return new Promise((resolve) => {
+            const image = new Image();
+            image.src = URL.createObjectURL(file);
+
+            image.onload = () => {
+              // Resolve the promise to signal that the image has finished loading
+              resolve(index);
+            };
+          });
+        })
+      ).then((loadedIndexes) => {
+        const nextIndex = loadedIndexes[0];
+        setUploadingIndex(nextIndex);
+
+        setTimeout(() => {
+          setLoading(false);
+          setIsImageUploaded(true);
+          setShowOptionsCard(true);
+
+          const updatedLoadingStates = [...loadingStates];
+          loadedIndexes.forEach((index) => {
+            updatedLoadingStates[index] = false;
+          });
+          setLoadingStates(updatedLoadingStates);
+
+          // ... rest of your code ...
+        }, 1000);
+      });
+    } else {
+      // Handle the case where the user selects more images than allowed
+      setShowMaxImagesMessage(true); // Show the "Maximum 5 images are allowed" message
+    }
+  };
+  const handleUploadImages = (images) => {
+    if (uploadedFiles.length < MAX_IMAGES) {
+      setLoading(true);
+      setFileTypeError(null); // Clear any previous error messages
+
+      const newImages = images.slice(0, MAX_IMAGES - uploadedFiles.length); // Take only the first (5 - number of already uploaded images) images
+
+      // ... (rest of the code to process and display images)
+    } else {
+      // Handle the case where the user selects more images than allowed
+      setShowMaxImagesMessage(true); // Show the "Maximum 5 images are allowed" message
+    }
+  };
+
+  const handleRemove = (index) => {
+    const updatedFiles = [...uploadedFiles];
+    updatedFiles.splice(index, 1);
+    setUploadedFiles(updatedFiles);
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -57,123 +181,208 @@ const ProfileImageMaker = () => {
 
   return (
     <>
-    
-    <ToolsHeader></ToolsHeader>
-    <div className="H">
-      <div className="Compress mb-20 ">
-        
-        
-        <section className="mt-60 -text -">
-          <div className="mt-30">
+      <ToolsHeader></ToolsHeader>
+      <div className="H" style={{ overflow: "hidden" }}>
+        <section className="mt-20 -text -">
+          <div className="mt-40  sm:pt-30">
             <div className="page-header__content">
               <div className="row justify-center text-center">
-                <div className="col-xl-6 col-lg-9 col-md-10 pb-20">
-                  <div>
-                    <h1 className="sectionHeading__title ">Profile Image Maker</h1>
+                <div className="col-12 text-center">
+                  <div className="sectionHeading ">
+                    <h2
+                      className="sectionHeading__title"
+                      style={{ fontSize: "42px" }}
+                    >
+                      Profile Image Maker
+                    </h2>
                   </div>
                 </div>
                 <div className="w-1/1" />
                 <div className="col-xl-5 col-lg-9 col-md-10 ">
-                  <div className="px-20">
-                    
-                  </div>
+                  <div className="px-20"></div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <div className="wrapper">
-          {uploadedFiles.length === 0 ? (
-            <div
-              className="card  bg-transparent mb-30 mt-30"
-              style={{
-                height: "427px",
-                width: "640px",
-                alignSelf: "center",
-                overflow: "hidden",
-              }}
-            >
-              <div>
+        <div className="Compress">
+          <div className="atropos  js-atropos">
+            <div className="atropos-scale">
+              <div className="md:d-none absolute-full-center z-2 ml-60 ">
                 <img
-                  src="img\about-2\bg2.jpg"
-                  className="drop-img "
-                  style={{ height: "450px", left: "0", top: "0" }}
-                ></img>
+                  className="float-animation w-1/1 h-1/3 object-fit-cover "
+                  src="/img/home-2/tabs/shapes.png"
+                  alt="image"
+                />
+              </div>
+            </div>
+          </div>
 
-                <div {...getRootProps()} className="dropzone-card ">
-                  <input {...getInputProps()} />
-                  <div className="drops-c ">
-                    <button className="button -md -accent text-white -uppercase mb-10">
-                      Start From A photo
-                    </button>
+          <div className="wrapper">
+            {uploadedFiles.length === 0 ? (
+              <div
+                className="card card1 bg-transparent mb-30 mt-20"
+                style={{
+                  height: "427px",
+                  width: "640px",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  alignSelf: "center",
+                  overflow: "hidden",
+                }}
+              >
+                <div>
+                  <img
+                    src="img\about-2\bg2.jpg"
+                    className="drop-img "
+                    style={{ height: "450px", left: "0", top: "0" }}
+                  ></img>
 
-                    <h2 className="sectionHeading">Or Drop An Image Here</h2>
+                  <div {...getRootProps()} className="dropzone-card ">
+                    <input {...getInputProps()} />
+                    <div className="drops-c ">
+                      <button className="button -md -accent text-white -uppercase mb-10">
+                        Start From A photo
+                      </button>
+
+                      <h2 className="sectionHeading">Or Drop An Image Here</h2>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div
-              className="card bg-white mb-30 mt-30"
-              style={{
-                height: "427px",
-                width: "640px",
-                alignSelf: "center",
-                overflow: "hidden",
-              }}
-            >
-              <div className="uploaded-files">
-                {isLoading && (
-                  <div className="loading-spinner-container">
-                    <LoadingSpinner />
-                  </div>
-                )}
-                {uploadedFiles.map((file) => (
-                  <div key={file.name} className="uploaded-image-container">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
-                      className="uploaded-image"
-                    />
-                    <div className="buttons-row mt-10 mb-10">
-                      <button
-                        onClick={handleDownload}
-                        className="btn btn-danger"
-                      >
-                        Download
-                      </button>
-                      <button onClick={handleEdit} className="btn btn-primary">
-                        Edit
-                      </button>
-                      <button
-                        onClick={handleClear}
-                        className="btn btn-secondary"
-                      >
-                        <span></span>Clear
+            ) : (
+              <div className="page-container  ">
+                {uploadedFiles.length > 0 && showOptionsCard && (
+                  <div className="options-card1">
+                    <div className="tabs-container">
+                      <div className="">
+                        <div>
+                          <h4 className="testimonials__title text-xl fw-700 text-dark-1 mt-0">
+                            Choose The Background Color
+                          </h4>
+
+                          <div
+                            className="nav -slider justify-center md:justify-center mt-20 md:mt-32"
+                            style={{ color: "#5A13B5", cursor: "pointer" }}
+                          >
+                                                        {colorOptions.map((color, index) => (
+                              <div
+                                key={index}
+                                className="nav__item -right ml-10 js-next"
+                                onClick={() => handleColorClick(color)}
+                                style={{
+                                  backgroundColor: color,
+                                  borderRadius: "50%",
+                                  padding: "10px",
+                                  marginBottom: "15px",
+                                  height: "30px",
+                                  width: "30px",
+
+                                  cursor: "pointer",
+                                  border:
+                                    selectedColor === color
+                                      ? "2px solid blue"
+                                      : "none", // Add a border for the selected color
+                                }}
+                              ></div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <button className="submit-buttonn mt-30">
+                        Profile Image
                       </button>
                     </div>
                   </div>
-                ))}
+                )}
+               <div className=" card-2 mb-30 mt-30">
+                  <img src="" className="drop-img"></img>
+                  <div className="uploaded-files">
+                    <div className="image-grid">
+                      {uploadedFiles.map((file, index) => (
+                        <div className="uploaded-image-container" key={index}>
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={file.name}
+                            className="uploaded-image"
+                          />
+                          {index === uploadedFiles.length - 1 && isLoading ? (
+                            // Show loading spinner only for the last uploaded image
+                            <div className="loading-spinner-container">
+                              <LoadingSpinner />
+                            </div>
+                          ) : null}
+                          <div
+                            className="cancel-icon"
+                            onClick={() => handleRemove(index)}
+                            title="Remove"
+                          >
+                            &#x2716;
+                          </div>
+                        </div>
+                      ))}
+                      {/* Add More Card */}
+
+                      <div className="add-moree-image-container">
+                        {/* Add More Card */}
+                        {uploadedFiles.length < MAX_IMAGES && (
+                          <div className="add-moree-image-container">
+                            <div
+                              {...getRootProps()}
+                              className={`add-more-card ${
+                                uploadedFiles.length >= MAX_IMAGES
+                                  ? "disabled"
+                                  : ""
+                              }`}
+                              style={{
+                                pointerEvents:
+                                  uploadedFiles.length >= MAX_IMAGES
+                                    ? "none"
+                                    : "auto",
+                              }}
+                            >
+                              <input
+                                {...getInputProps()}
+                                id="dropzone-input"
+                                style={{ display: "none" }}
+                                accept="image/jpeg, image/png, image/gif, image/webp, image/svg+xml"
+                              />
+                              <div className="add-more-content">
+                                <span className="add-more-text">Add More</span>
+                                <div className="add-icon">
+                                  <BiSolidImageAdd />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {uploadedFiles.length >= 5 && (
+                    <div className="mt-5 error-message ">
+                      Maximum 5 images are allowed.
+                    </div>
+                  )}
+                  {fileTypeError && (
+                    // Popup/modal to display the error message
+                    <div className="error-message  mt-5">
+                      <p>{fileTypeError}</p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+        <Steps></Steps>
+        <Compresscontents></Compresscontents>
+        <ExploreTools></ExploreTools>
+        <FaqTwo></FaqTwo>
+        <Cta></Cta>
+        <Footer></Footer>
       </div>
-      <Steps></Steps>
-      <Compresscontents></Compresscontents>
-      <ExploreTools></ExploreTools>
-      <FaqTwo></FaqTwo>
-      <Cta></Cta>
-      <Footer></Footer>
-
-
-
-      
-
-      
-    </div>
-      </>
-   
+    </>
   );
 };
 

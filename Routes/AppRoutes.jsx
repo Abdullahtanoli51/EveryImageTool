@@ -21,6 +21,9 @@ import Contact from '../Pages/Contact/Contact';
 import Terms from '../Pages/Terms/Terms';
 import LoginPage from '../Pages/Login/login';
 import Register from '../Pages/Login/Signup';
+import ConvertToPNG from '../Pages/Convert-to-PNG/Convert-to-PNG';
+import ConvertToWEBP from '../Pages/Convert-to-WEBP/Convert-to-WEBP';
+import Replacebackground from '../Pages/Replace-Background/ReplaceBackground';
 
 
 
@@ -31,26 +34,29 @@ const AppRoutes = () => {
     <BrowserRouter>
     <Routes>
         <Route path='/' element={<HomePage></HomePage>}></Route>
-        <Route path='/compress' element={<Compress></Compress>}></Route>
-        <Route path='/resize' element={<Resize></Resize>}></Route>
-        <Route path='/ConvertToJPG' element={<ConvertToJPG></ConvertToJPG>}></Route>
+        <Route path='/image-compressor' element={<Compress></Compress>}></Route>
+        <Route path='/image-resizer' element={<Resize></Resize>}></Route>
+        <Route path='/convert-to-jpg' element={<ConvertToJPG></ConvertToJPG>}></Route>
         <Route path='/Crop' element={<CropImage></CropImage>}></Route>
-        <Route path='/Convert-from-jpg' element={<ConvertFromJPG></ConvertFromJPG>}></Route>
-        <Route path='/Remove-Background' element={<RemoveBackground></RemoveBackground>}></Route>
-        <Route path='/WaterMark' element={<WaterMark></WaterMark>}></Route>
-        <Route path='/Meme-Generator' element={<MemeGernerator></MemeGernerator>}></Route>
-        <Route path='/RotateImage' element={<RotateImage></RotateImage>}></Route>
-        <Route path='/Html-to-Image' element={<HtmlToImage></HtmlToImage>}></Route>
-        <Route path='/Blur-Faces' element={<BlurFaces></BlurFaces>}></Route>
-        <Route path='/Profile-Image-Maker' element={<ProfileImageMaker></ProfileImageMaker>}></Route>
-        <Route path='/Photo-Edior' element={<PhotoEditor></PhotoEditor>}></Route>
-        <Route path='/Upscale' element={<UpscaleImage></UpscaleImage>}></Route>
-        <Route path='/Blog' element={<Blog></Blog>}></Route>
+        <Route path='/convert-from-jpg' element={<ConvertFromJPG></ConvertFromJPG>}></Route>
+        <Route path='/remove-background' element={<RemoveBackground></RemoveBackground>}></Route>
+        <Route path='/watermark-image' element={<WaterMark></WaterMark>}></Route>
+        <Route path='/meme-menerator' element={<MemeGernerator></MemeGernerator>}></Route>
+        <Route path='/rotate-image' element={<RotateImage></RotateImage>}></Route>
+        <Route path='/html-to-image' element={<HtmlToImage></HtmlToImage>}></Route>
+        <Route path='/blur-faces' element={<BlurFaces></BlurFaces>}></Route>
+        <Route path='/profile-image-maker' element={<ProfileImageMaker></ProfileImageMaker>}></Route>
+        <Route path='/photo-edior' element={<PhotoEditor></PhotoEditor>}></Route>
+        <Route path='/upscale-image' element={<UpscaleImage></UpscaleImage>}></Route>
+        <Route path='/blog' element={<Blog></Blog>}></Route>
         <Route path='/blog/blog-details' element={<BlogDetails></BlogDetails>}></Route>
         <Route path='/contacts' element={<Contact></Contact>}></Route>
         <Route path='/terms' element={<Terms></Terms>}></Route>
         <Route path='/login' element={<LoginPage></LoginPage>}></Route>
-        <Route path='/Register' element={<Register/>}></Route>
+        <Route path='/register' element={<Register/>}></Route>
+        <Route path='convert-to-png' element={<ConvertToPNG></ConvertToPNG>}></Route>
+        <Route path='/convert-to-webp' element={<ConvertToWEBP></ConvertToWEBP>}></Route>
+        <Route path='/replace-background' element={<Replacebackground></Replacebackground>}></Route>
     </Routes>
     </BrowserRouter>
   
