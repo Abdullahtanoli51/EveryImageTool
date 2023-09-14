@@ -15,6 +15,8 @@ import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
+import WaterMarkcontents from "./content/contents.jsx";
+import CtaHome from "../Compress/Cat/Cat";
 
 const WaterMark = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -166,7 +168,7 @@ const WaterMark = () => {
                       className="sectionHeading__title"
                       style={{ fontSize: "42px" }}
                     >
-                      WaterMark Image
+                      Bulk Image Watermark
                     </h2>
                   </div>
                 </div>
@@ -266,7 +268,7 @@ const WaterMark = () => {
                                 type="text"
                                 className="custom-input mb-3"
                                 placeholder="Enter text here"
-                                style={{border:"1px solid #5A13B5"}}
+                                style={{ border: "1px solid #5A13B5" }}
                               />
 
                               <h4 className="testimonials__title text-xl fw-700 text-dark-1 ">
@@ -394,7 +396,6 @@ const WaterMark = () => {
                                   id="file-upload"
                                   className="file-input-element"
                                   accept="image/*"
-                                 
                                 />
                               </div>
 
@@ -559,10 +560,10 @@ const WaterMark = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+        <WaterMarkcontents></WaterMarkcontents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+        <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

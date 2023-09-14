@@ -33,10 +33,11 @@ const Hero1 = () => {
           <div className="row pt-20 ">
             <div className="col-xl-12 col-lg-12 col-md-12">
               <div className="masthead__content relative z-2 ">
-                <div data-split="lines   ">
+                <div data-split="lines ">
                   <h1 className="sectionHeading__title  fs-3x relative sm:fs-2 ">
-                    Elevate Your Image With These Bulk
-                    <br className="lg:d-none" /> Image Tools Wizards
+                  Effortless Bulk Image Editing with AI Powered
+                    <br className="lg:d-none" />  Image Artisan Tools
+
                   </h1>
                 </div>
                 <div data-split="px-120">
@@ -44,10 +45,8 @@ const Hero1 = () => {
                     className="masthead__text text-dark  pt-10 px-120 sm:px-40"
                     style={{ fontSize: "16px", lineHeight: "24px" }}
                   >
-                    We are Pixlr, free photo editing and design tools with
-                    AI-power. Edit photos and create stunning designs right in
-                    your browser, on your phone or desktop for free. Start from
-                    an empty canvas, a photo.
+                  Discover Image Artisan, where cutting-edge AI meets intuitive design. Whether you're working with a single image or an entire batch, our platform has the tools you need. Dive in from any device, be it desktop or mobile, and watch your photos transform effortlessly.
+
                   </p>
                 </div>
               </div>

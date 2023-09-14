@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
+import ToWebpContents from "./content/contents.jsx";
+import CtaHome from "../Compress/Cat/Cat";
 
 const ConvertToWEBP = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -349,10 +351,10 @@ const ConvertToWEBP = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+       <ToWebpContents></ToWebpContents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+       <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

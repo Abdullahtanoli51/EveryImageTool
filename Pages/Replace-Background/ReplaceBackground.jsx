@@ -15,6 +15,8 @@ import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
 import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
+import CtaHome from "../Compress/Cat/Cat";
+import ReplacebackgroundContents from "./content/contents.jsx";
 
 const Replacebackground = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -376,10 +378,10 @@ const Replacebackground = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+       <ReplacebackgroundContents></ReplacebackgroundContents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+        <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

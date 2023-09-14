@@ -45,7 +45,7 @@ export default function RemoveBackgroundSection() {
                         width: "490px",
                         maxWidth: "100%",
                         border: "0px",
-                        objectFit:"fill", 
+                        objectFit: "fill",
                       }}
                     />
                     <img
@@ -55,33 +55,39 @@ export default function RemoveBackgroundSection() {
                       style={{
                         height: "393px",
                         width: "490px",
-                        objectFit:"fill", 
+                        objectFit: "fill",
                         maxWidth: "100%",
                         border: "0px",
-                        opacity:""
+                        opacity: "",
                       }}
                     />
                   </ImgComparisonSlider>
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-10 mb-80 sm:mb-0 order-1 order-lg-2 sm:px-20   " style={{alignItems:"end" ,paddingLeft:"4rem"}}>
+            <div
+              className="col-xl-6 col-lg-6 col-md-10 mb-80 sm:mb-0 order-1 order-lg-2 sm:px-20   "
+              style={{ alignItems: "end", paddingLeft: "4rem" }}
+            >
               <div className="sectionHeading  ">
                 <h2 className="sectionHeading__title">
-                  Remove Background
-                 
+                  Remove Image Background
                 </h2>
               </div>
-              <p className="mt-30 sm:mt-20  lg:pr-0">
-              Use AI algorithms to accurately isolate objects, shapes, hair, and fur. We prefer smooth edge refinement, ensuring your subject is flawlessly separated from the background.
+              <p className="mt-30 sm:mt-20  lg:pr-0 text-start" >
+                Our Bulk image background remover tool effortlessly isolates
+                subjects, shapes, hair, and fur., erasing backgrounds with
+                precision and ensuring smooth edges.
+                <br></br> Ideal for e-commerce, marketing, or personal use.
+                Transform your visuals, highlighting what matters most
               </p>
 
               <Link
-                  to="/remove-background"
-                  className="button -md rounded-8 -light-accent text-accent mt-20 "
-                >
-                  Remove Background
-                </Link>
+                to="/remove-background"
+                className="button -md rounded-8 -light-accent text-accent mt-20 "
+              >
+                Remove Image Background
+              </Link>
             </div>
           </div>
         </div>

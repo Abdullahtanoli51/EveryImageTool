@@ -151,7 +151,7 @@ const Compress = () => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: "images/*", // Only accept image files
+    accept: "image/*", // Only accept image files
   });
 
   return (
@@ -168,7 +168,7 @@ const Compress = () => {
                       className="sectionHeading__title"
                       style={{ fontSize: "42px" }}
                     >
-                      Compress Image
+                      Bulk Image Compressor
                     </h2>
                   </div>
                 </div>

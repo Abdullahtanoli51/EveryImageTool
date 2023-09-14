@@ -15,6 +15,13 @@ import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
 import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
+import CtaHome from "../Compress/Cat/Cat";
+import Resizercontents from "./content/contents.jsx";
+
+import axios from "axios";
+import FormData from "form-data";
+import fs from "fs";
+import { useNavigate } from "react-router-dom";
 
 const Resize = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -36,8 +43,8 @@ const Resize = () => {
   const MAX_IMAGES = 5;
   const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(null);
-
-  
+  const [images, setimage] = useState([]);
+  const navigate = useNavigate();
 
   const handleAspectRatioChange = () => {
     setAspectRatioMaintained(!aspectRatioMaintained);
@@ -88,45 +95,150 @@ const Resize = () => {
   const handlePixelWidthChange = (e) => {
     let newWidthValue = e.target.value;
     // Limit the input to four characters
-    if (newWidthValue.length > 4) {
-      newWidthValue = newWidthValue.slice(0, 4);
-    }
-    setNewPixelWidth(newWidthValue);
   
-    if (!isNaN(newWidthValue) && newWidthValue >= 0 && newWidthValue <= 9999) {
-      const newHeightValue = aspectRatioMaintained
-        ? Math.round((newWidthValue / imageWidth) * imageHeight)
-        : newPixelHeight;
-  
-      setNewPixelHeight(newHeightValue);
-    }
+      if (newWidthValue.length > 4) {
+        newWidthValue = newWidthValue.slice(0, 4);
+      }
+      setNewPixelWidth(newWidthValue);
+
+      if (
+        !isNaN(newWidthValue) &&
+        newWidthValue >= 0 &&
+        newWidthValue <= 9999
+      ) {
+        const newHeightValue = aspectRatioMaintained
+          ? Math.round((newWidthValue / imageWidth) * imageHeight)
+          : newPixelHeight;
+
+        setNewPixelHeight(newHeightValue);
+      }
+    
   };
   const handlePixelHeightChange = (e) => {
     let newHeightValue = e.target.value;
     // Limit the input to four characters
-    if (newHeightValue.length > 4) {
-      newHeightValue = newHeightValue.slice(0, 4);
-    }
-    setNewPixelHeight(newHeightValue);
-  
-    if (!isNaN(newHeightValue) && newHeightValue >= 0 && newHeightValue <= 9999) {
-      const newWidthValue = aspectRatioMaintained
-        ? Math.round((newHeightValue / imageHeight) * imageWidth)
-        : newPixelWidth;
-  
-      setNewPixelWidth(newWidthValue);
+    if (/^\d+$/.test(newHeightValue)) {
+      if (newHeightValue.length > 4) {
+        newHeightValue = newHeightValue.slice(0, 4);
+      }
+      setNewPixelHeight(newHeightValue);
+
+      if (
+        !isNaN(newHeightValue) &&
+        newHeightValue >= 0 &&
+        newHeightValue <= 9999
+      ) {
+        const newWidthValue = aspectRatioMaintained
+          ? Math.round((newHeightValue / imageHeight) * imageWidth)
+          : newPixelWidth;
+
+        setNewPixelWidth(newWidthValue);
+      }
     }
   };
   const handleResizeByPercentage = () => {
     const newWidth = Math.round(imageWidth * (value / 100));
     const newHeight = Math.round(imageHeight * (value / 100));
+    const images = uploadedFiles;
+    console.log(images);
+    const apiurl =
+      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/resize-images";
+    const requestdata = {
+      width: newWidth,
+      height: newHeight,
+      images: uploadedFiles,
+    };
+    fetch(apiurl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify(requestdata),
+    })
+      .then((response) => {
+        if (response.ok) {
+          throw new Error("Network response is Not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("API Response:", data);
+      })
+      .catch((error) => {
+        console.error("Api Error ", error);
+      });
+
     setImageWidth(newWidth);
     setImageHeight(newHeight);
+    Navigate("/resized");
   };
 
   const handleResizeByPixel = () => {
     setImageWidth(newWidth);
     setImageHeight(newHeight);
+
+    let data = new FormData();
+
+    uploadedFiles.forEach((file, index) => {
+      // Append each image to the FormData
+      data.append("images[]", file, file.name);
+    });
+
+    console.log(imageWidth);
+
+    console.log(imageHeight);
+    data.append("width", newPixelWidth);
+    data.append("height", newPixelHeight);
+
+    let config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/resize-images",
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        // console.log(JSON.stringify(response.data));
+
+        // Create a download link element
+        // const downloadLink = document.createElement('a');
+        // downloadLink.href = 'data:application/zip;base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(response.data)));
+        // downloadLink.download = 'resized_images.zip'; // Specify the desired file name
+
+        // // Programmatically trigger the click event to initiate the download
+        // downloadLink.click();
+        const responseData = response.data;
+
+      // Use the React Router navigate hook to navigate to the /resized page
+
+      navigate('/resized', {responseData:"string"  });
+        // Create a Blob from the response data with the correct MIME type
+        const blob = new Blob([response.data], { type: "application/zip" });
+
+        // Create a URL for the Blob
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create a download link element
+        const downloadLink = document.createElement("a");
+        downloadLink.href = blobUrl;
+        downloadLink.download = "resized_images.zip"; // Specify the desired file name
+
+        // Programmatically trigger the click event to initiate the download
+        downloadLink.click();
+
+        // Clean up the URL and Blob
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+     
   };
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -146,85 +258,79 @@ const Resize = () => {
         0,
         MAX_IMAGES - uploadedFiles.length
       );
-     const newLoadingStates = newImages.map(() => true);
-     const isImage = newImages.every((file) => file.type.startsWith("image/"));
+      const newLoadingStates = newImages.map(() => true);
+      const isImage = newImages.every((file) => file.type.startsWith("image/"));
 
-     if (!isImage) {
-       // If any of the dropped files is not an image, show an error message
-       setFileTypeError("Please choose an image file.");
-       setLoading(false);
-       setTimeout(() => {
-         setFileTypeError(null);
-       }, 2000); // 5000 milliseconds (5 seconds)
-       return;
-     }
-    // Add the new images to the existing uploaded files
-    setUploadedFiles((prevUploadedFiles) => [
-      ...prevUploadedFiles,
-      ...newImages,
-    ]);
-
-    // Add the loading states for the new images
-    setLoadingStates((prevLoadingStates) => [
-      ...prevLoadingStates,
-      ...newLoadingStates,
-    ]);
-
-    // Process each image in the acceptedFiles array
-    Promise.all(
-      newImages.map((file, index) => {
-        return new Promise((resolve) => {
-          const image = new Image();
-          image.src = URL.createObjectURL(file);
-
-          image.onload = () => {
-            setImageWidth(image.width);
-            setImageHeight(image.height);
-
-            // Resolve the promise to signal that the image has finished loading
-            resolve(index);
-          };
-        });
-      })
-    ).then((loadedIndexes) => {
-      // Set the uploading index when all images have finished loading
-      const nextIndex = loadedIndexes[0];
-      setUploadingIndex(nextIndex);
-
-      // Simulate loading delay with setTimeout
-      setTimeout(() => {
+      if (!isImage) {
+        // If any of the dropped files is not an image, show an error message
+        setFileTypeError("Please choose an image file.");
         setLoading(false);
-        setIsImageUploaded(true);
-        setShowOptionsCard(true);
+        setTimeout(() => {
+          setFileTypeError(null);
+        }, 2000); // 5000 milliseconds (5 seconds)
+        return;
+      }
+      // Add the new images to the existing uploaded files
+      setUploadedFiles((prevUploadedFiles) => [
+        ...prevUploadedFiles,
+        ...newImages,
+      ]);
 
-        // Mark all images as loaded in the loading states
-        const updatedLoadingStates = [...loadingStates];
-        loadedIndexes.forEach((index) => {
-          updatedLoadingStates[index] = false;
-        });
-        setLoadingStates(updatedLoadingStates);
+      // Add the loading states for the new images
+      setLoadingStates((prevLoadingStates) => [
+        ...prevLoadingStates,
+        ...newLoadingStates,
+      ]);
 
-    
-      }, 1000);
-    });
-  } else {
-    // Handle the case where the user selects more images than allowed
-    setShowMaxImagesMessage(true); // Show the "Maximum 5 images are allowed" message
-  }
+      // Process each image in the acceptedFiles array
+      Promise.all(
+        newImages.map((file, index) => {
+          return new Promise((resolve) => {
+            const image = new Image();
+            image.src = URL.createObjectURL(file);
+
+            image.onload = () => {
+              setImageWidth(image.width);
+              setImageHeight(image.height);
+
+              // Resolve the promise to signal that the image has finished loading
+              resolve(index);
+            };
+          });
+        })
+      ).then((loadedIndexes) => {
+        // Set the uploading index when all images have finished loading
+        const nextIndex = loadedIndexes[0];
+        setUploadingIndex(nextIndex);
+
+        // Simulate loading delay with setTimeout
+        setTimeout(() => {
+          setLoading(false);
+          setIsImageUploaded(true);
+          setShowOptionsCard(true);
+
+          // Mark all images as loaded in the loading states
+          const updatedLoadingStates = [...loadingStates];
+          loadedIndexes.forEach((index) => {
+            updatedLoadingStates[index] = false;
+          });
+          setLoadingStates(updatedLoadingStates);
+        }, 1000);
+      });
+    } else {
+      // Handle the case where the user selects more images than allowed
+      setShowMaxImagesMessage(true); // Show the "Maximum 5 images are allowed" message
+    }
   };
-
 
   const handleUploadImages = (images) => {
     if (uploadedFiles.length < MAX_IMAGES) {
       setLoading(true);
-      setFileTypeError(null); 
+      setFileTypeError(null);
 
       const newImages = images.slice(0, MAX_IMAGES - uploadedFiles.length); // Take only the first (5 - number of already uploaded images) images
-
-     
     } else {
-    
-      setShowMaxImagesMessage(true); 
+      setShowMaxImagesMessage(true);
     }
   };
 
@@ -256,7 +362,7 @@ const Resize = () => {
                       className="sectionHeading__title"
                       style={{ fontSize: "42px" }}
                     >
-                      Resize Image
+                      Bulk Image Resizer
                     </h2>
                   </div>
                 </div>
@@ -318,7 +424,7 @@ const Resize = () => {
                 {uploadedFiles.length > 0 && showOptionsCard && (
                   <div className="options-card1">
                     <div className="tabs-container">
-                    <div className="tabs__controls js-tabs-controls">
+                      <div className="tabs__controls js-tabs-controls">
                         <div className=" row justify-center">
                           <div className="col-xl-10 col-lg-9">
                             <div className="row tabs-group">
@@ -383,7 +489,7 @@ const Resize = () => {
                             )}
                             <button
                               className="submit-buttonn mt-50"
-                              onClick={handleResizeByPercentage}
+                              onClick={handleResizeByPixel}
                             >
                               Resize
                             </button>
@@ -432,14 +538,19 @@ const Resize = () => {
                                 Maintain Aspect Ratio
                               </label>
                             </div>
-                            <button className="submit-buttonn">Submit</button>
+                            <button
+                              className="submit-buttonn"
+                              onClick={handleResizeByPixel}
+                            >
+                              Submit
+                            </button>
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
                 )}
-               <div className=" card-2 mb-30 mt-30">
+                <div className=" card-2 mb-30 mt-30">
                   <img src="" className="drop-img"></img>
                   <div className="uploaded-files">
                     <div className="image-grid">
@@ -520,10 +631,10 @@ const Resize = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+        <Resizercontents></Resizercontents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+        <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

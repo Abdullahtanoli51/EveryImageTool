@@ -8,7 +8,7 @@ export default function Steps() {
             <div className="col-12 text-center">
               <div className="sectionHeading ">
                 <h2 className="sectionHeading__title" style={{ fontSize: "44px" }}>
-                  How to Compress the Image
+                  How to Replace Background of Image
                 </h2>
               </div>
             </div>
@@ -17,54 +17,54 @@ export default function Steps() {
             <div className="col-lg-4 col-sm-6">
               <div
                 className="py-48 px-40  shadow-card br-rounded-32"
-                style={{ backgroundColor: "#e5e7eb" }}
+                style={{ backgroundColor: "#e5e7eb",height:"340px" }}
               >
                 <div className="sectionHeading__subtitle" style={{fill:"white"}}>
                   <span>Step 1</span>
                 </div>
                 
                 <h4 className="text-xl fw-600 lh-15 mt-20">
-                  Flexible planning
+                Upload Your Image
                 </h4>
                 <p className="mt-10">
-                  Great free UI package based on Bootstrap 5 that includes the
-                  most important components and features.
+                Head to the 'Replace Image Background' tool and click "Upload" to choose your image. Alternatively, drag and drop your photo into the specified area.
+
                 </p>
               </div>
             </div>
             <div className="col-lg-4 col-sm-6">
               <div
                 className="py-48 px-40  shadow-card br-rounded-32"
-                style={{ backgroundColor: "#e5e7eb" }}
+                style={{ backgroundColor: "#e5e7eb" , height:"340px" }}
               >
                 <div className="sectionHeading__subtitle" style={{fill:"white"}}>
                   <span>Step 2</span>
                 </div>
                 
                 <h4 className="text-xl fw-600 lh-15 mt-20">
-                  Flexible planning
+                Select New Background
                 </h4>
                 <p className="mt-10">
-                  Great free UI package based on Bootstrap 5 that includes the
-                  most important components and features.
+                Once your primary image is uploaded, choose or upload a new background image. Alternatively, pick a from our curated pallets of backgrounds.
+
                 </p>
               </div>
             </div>
             <div className="col-lg-4 col-sm-6">
               <div
                 className="py-48 px-40  shadow-card br-rounded-32"
-                style={{ backgroundColor: "#e5e7eb" }}
+                style={{ backgroundColor: "#e5e7eb", height:"340px" }}
               >
                 <div className="sectionHeading__subtitle" style={{fill:"white"}}>
                   <span>Step 3</span>
                 </div>
                 
                 <h4 className="text-xl fw-600 lh-15 mt-20">
-                  Flexible planning
+                Merge & Adjust
                 </h4>
                 <p className="mt-10">
-                  Great free UI package based on Bootstrap 5 that includes the
-                  most important components and features.
+                Click the "Replace" button and let the AI work its magic. Review the merged result in the preview. Fine-tune placement or blending as needed, then hit "Download" to save your newly crafted image.
+
                 </p>
               </div>
             </div>

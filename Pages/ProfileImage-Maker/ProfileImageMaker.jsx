@@ -15,6 +15,8 @@ import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
 import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
+import CtaHome from "../Compress/Cat/Cat";
+import ImageMakercontents from "./content/contents.jsx";
 
 const ProfileImageMaker = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -376,10 +378,10 @@ const ProfileImageMaker = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+       <ImageMakercontents></ImageMakercontents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+        <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

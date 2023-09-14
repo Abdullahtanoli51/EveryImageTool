@@ -24,6 +24,7 @@ import Register from '../Pages/Login/Signup';
 import ConvertToPNG from '../Pages/Convert-to-PNG/Convert-to-PNG';
 import ConvertToWEBP from '../Pages/Convert-to-WEBP/Convert-to-WEBP';
 import Replacebackground from '../Pages/Replace-Background/ReplaceBackground';
+import Resized from '../Pages/Resize/AfterResize';
 
 
 
@@ -37,7 +38,7 @@ const AppRoutes = () => {
         <Route path='/image-compressor' element={<Compress></Compress>}></Route>
         <Route path='/image-resizer' element={<Resize></Resize>}></Route>
         <Route path='/convert-to-jpg' element={<ConvertToJPG></ConvertToJPG>}></Route>
-        <Route path='/Crop' element={<CropImage></CropImage>}></Route>
+        <Route path='/crop' element={<CropImage></CropImage>}></Route>
         <Route path='/convert-from-jpg' element={<ConvertFromJPG></ConvertFromJPG>}></Route>
         <Route path='/remove-background' element={<RemoveBackground></RemoveBackground>}></Route>
         <Route path='/watermark-image' element={<WaterMark></WaterMark>}></Route>
@@ -57,6 +58,7 @@ const AppRoutes = () => {
         <Route path='convert-to-png' element={<ConvertToPNG></ConvertToPNG>}></Route>
         <Route path='/convert-to-webp' element={<ConvertToWEBP></ConvertToWEBP>}></Route>
         <Route path='/replace-background' element={<Replacebackground></Replacebackground>}></Route>
+        <Route path='/resized' element={<Resized></Resized>}></Route>
     </Routes>
     </BrowserRouter>
   

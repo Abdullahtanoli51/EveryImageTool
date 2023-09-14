@@ -8,7 +8,7 @@ export default function Steps() {
             <div className="col-12 text-center">
               <div className="sectionHeading ">
                 <h2 className="sectionHeading__title" style={{ fontSize: "44px" }}>
-                  How to Compress the Image
+                  How to Create Stunning Profile Image
                 </h2>
               </div>
             </div>
@@ -17,54 +17,63 @@ export default function Steps() {
             <div className="col-lg-4 col-sm-6">
               <div
                 className="py-48 px-40  shadow-card br-rounded-32"
-                style={{ backgroundColor: "#e5e7eb" }}
+                style={{ backgroundColor: "#e5e7eb"  ,height:"340px" }}
               >
-                <div className="sectionHeading__subtitle" style={{fill:"white"}}>
+                <div
+                  className="sectionHeading__subtitle"
+                  style={{ fill: "white" }}
+                >
                   <span>Step 1</span>
                 </div>
-                
+
                 <h4 className="text-xl fw-600 lh-15 mt-20">
-                  Flexible planning
+                Begin with an Image
                 </h4>
                 <p className="mt-10">
-                  Great free UI package based on Bootstrap 5 that includes the
-                  most important components and features.
+                Navigate to the 'Profile Image Maker' tool. Click "Upload" to choose your preferred photo or drag and drop it into the designated area.
+
                 </p>
               </div>
             </div>
             <div className="col-lg-4 col-sm-6">
               <div
                 className="py-48 px-40  shadow-card br-rounded-32"
-                style={{ backgroundColor: "#e5e7eb" }}
+                style={{ backgroundColor: "#e5e7eb" ,height:"340px" }}
               >
-                <div className="sectionHeading__subtitle" style={{fill:"white"}}>
+                <div
+                  className="sectionHeading__subtitle"
+                  style={{ fill: "white" }}
+                >
                   <span>Step 2</span>
                 </div>
-                
+
                 <h4 className="text-xl fw-600 lh-15 mt-20">
-                  Flexible planning
+                Customize & Edit
                 </h4>
                 <p className="mt-10">
-                  Great free UI package based on Bootstrap 5 that includes the
-                  most important components and features.
+                Choose background color from preset color pallets and sizes tailored for specific platforms (e.g., Facebook, LinkedIn) or customize your dimensions.
+
                 </p>
               </div>
             </div>
             <div className="col-lg-4 col-sm-6">
               <div
                 className="py-48 px-40  shadow-card br-rounded-32"
-                style={{ backgroundColor: "#e5e7eb" }}
+                style={{ backgroundColor: "#e5e7eb"  ,height:"340px" }}
               >
-                <div className="sectionHeading__subtitle" style={{fill:"white"}}>
+                <div
+                  className="sectionHeading__subtitle"
+                  style={{ fill: "white" }}
+                >
                   <span>Step 3</span>
                 </div>
-                
+
                 <h4 className="text-xl fw-600 lh-15 mt-20">
-                  Flexible planning
+                Save & Share
                 </h4>
                 <p className="mt-10">
-                  Great free UI package based on Bootstrap 5 that includes the
-                  most important components and features.
+                Once you've crafted your ideal profile image, click "Download" to save it to your device. Now, it's ready for upload to your favorite social media or professional platforms!
+
                 </p>
               </div>
             </div>

@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
+import ToJPGcontents from "./content/contents.jsx";
+import CtaHome from "../Compress/Cat/Cat";
 
 const ConvertToJPG = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -340,10 +342,10 @@ const ConvertToJPG = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+       <ToJPGcontents></ToJPGcontents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+       <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Compresscontents = () => {
+const ToWebpContents = () => {
   return (
     <div>
       <section className="layout-pt-sm layout-pb-sm bg-white">
         <div className="container">
-          <div className="row y-gap-48 items-center">
+          <div className="row y-gap-48 ">
             <div className="col-xl-5 col-lg-6">
               <img
                 className="initial-img rounded-16"
@@ -16,22 +16,18 @@ const Compresscontents = () => {
            }}
               />
             </div>
-            <div className="col-xl-5 offset-xl-1 col-md-10 col-lg-6">
+            <div className="col-xl-6 offset-xl-1 col-md-10 col-lg-6">
               <div className="sectionHeading ">
                 <div className="sectionHeading__subtitle">
-                  <span>Strategy</span>
+                  
                 </div>
                 <h2 className="sectionHeading__title">
-                  fastest background
-                  <br /> eraser
+                Convert to WEBP
                 </h2>
               </div>
               <p className="mt-30 sm:mt-20  lg:pr-0 ">
-                Transform your photos with our background remover app! Highlight
-                your subject and create a transparent background, so you can
-                place it in a variety of new designs and destinations. Try it
-                now and immerse your subject in a completely different
-                environment!
+              Utilize our AI-powered tool to transform your images into the sleek, modern WEBP format. Perfect for web optimization, faster page loads, and reducing file sizes. Stay ahead with cutting-edge image efficiency
+
               </p>
               <div className="mt-30">
                 <Link
@@ -77,4 +73,4 @@ const Compresscontents = () => {
   );
 };
 
-export default Compresscontents;
+export default ToWebpContents;

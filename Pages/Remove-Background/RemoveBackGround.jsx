@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
+import CtaHome from "../Compress/Cat/Cat";
+import RemoveBGContents from "./content/contents.jsx";
 
 const RemoveBackground = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -367,10 +369,10 @@ const RemoveBackground = () => {
           </div>
         </div>
         <Steps></Steps>
-        <Compresscontents></Compresscontents>
+       <RemoveBGContents></RemoveBGContents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-        <Cta></Cta>
+        <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

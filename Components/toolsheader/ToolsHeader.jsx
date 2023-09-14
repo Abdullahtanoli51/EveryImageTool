@@ -58,15 +58,15 @@ const ToolsHeader = () => {
         </div>
 
         <ul className="menuItems "  >
-          <Link  to='/Remove-Background' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Remove Bg</li>
+          <Link  to='/remove-background' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Remove Bg</li>
           </Link>
-          <Link  to='/Crop' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Crop</li>
+          <Link  to='/replace-background' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Replace Bg</li>
           </Link>
-          <Link  to='/compress' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Compress</li>
+          <Link  to='/image-compressor' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Compress</li>
           </Link>
-          <Link  to='/resize' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Resize</li>
+          <Link  to='/image-resizer' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Resize</li>
           </Link>
-          <Link  to='/ConvertToJPG' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Convert to JPG</li>
+          <Link  to='/convert-to-jpg' style={{justifyContent:"start",alignSelf:"self-start" ,textDecoration:"none" }}> <li className="menuItem" >Convert to JPG</li>
           </Link>
          
          

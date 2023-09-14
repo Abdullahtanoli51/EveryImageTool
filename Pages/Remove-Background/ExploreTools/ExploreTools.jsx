@@ -20,7 +20,7 @@ export default function ExploreTools() {
                     <div className="row   y-gap-16 sm:px-80 " >
         <div className="col-lg-3 col-md-6 col-sm-10 ">
           <Link
-            to ="/compress"
+            to ="/replace-background"
             className="d-block  bg-dark  shadow-card decoration-none rounded-8"
             style={{
               background: "#444444 ",
@@ -66,7 +66,7 @@ export default function ExploreTools() {
               <div className="d-flex justify-center items-start absolute-full-center pt-80 ">
                 <div className=" py-4 text-white">
                   <p style={{ fontSize: "18px", lineHeight: "40px" }}>
-                    Compress
+                    Replace Background
                   </p>
                 </div>
               </div>
@@ -75,7 +75,7 @@ export default function ExploreTools() {
         </div>
         <div className="col-lg-3 col-md-6">
           <Link
-            to="/resize"
+            to="/image-resizer"
             className="d-block  bg-dark  shadow-card decoration-none rounded-8"
             style={{
               background: "#444444 ",
@@ -122,7 +122,7 @@ export default function ExploreTools() {
         </div>
         <div className="col-lg-3 col-md-6">
           <Link
-            to="/ConvertToJPG"
+            to="/convert-to-jpg"
             className="d-block  bg-dark  shadow-card decoration-none rounded-8"
             style={{
               background: "#444444 ",
@@ -171,7 +171,7 @@ export default function ExploreTools() {
         </div>
         <div className="col-lg-3 col-md-6">
           <Link
-            href="/Crop"
+            to="/profile-image-maker"
             className="d-block  bg-dark  shadow-card decoration-none rounded-8"
             style={{
               background: "#444444 ",
@@ -220,7 +220,7 @@ export default function ExploreTools() {
 
               <div className="d-flex justify-center items-start absolute-full-center pt-80 ">
                 <div className=" py-4 text-white">
-                  <p style={{ fontSize: "18px", lineHeight: "40px" }}>Crop</p>
+                  <p style={{ fontSize: "18px", lineHeight: "40px" }}>Profile Image Maker</p>
                 </div>
               </div>
             </Row>
