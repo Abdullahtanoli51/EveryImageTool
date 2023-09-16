@@ -18,6 +18,9 @@ import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
 import ToJPGcontents from "./content/contents.jsx";
 import CtaHome from "../Compress/Cat/Cat";
+import axios from "axios";
+import FormData from "form-data";
+import { useNavigate } from "react-router-dom";
 
 const ConvertToJPG = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -39,6 +42,9 @@ const ConvertToJPG = () => {
   const MAX_IMAGES = 5;
   const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(null);
+  const navigate = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -57,6 +63,57 @@ const ConvertToJPG = () => {
       link.click();
       document.body.removeChild(link);
     }
+  };
+
+  const handleConvertToPNG = () => {
+    const apiurl =
+      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/convert-to-jpg";
+    const requestdata = {
+      images: uploadedFiles,
+    };
+
+    const data = new FormData();
+    uploadedFiles.forEach((file, index) => {
+      data.append("images[]", file, file.name);
+    });
+
+    const config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: apiurl,
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
+
+    axios
+      .request(config)
+      .then((response) => {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
+
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          navigate(
+            `/success?tool=Converted&response=${encodeURIComponent(
+              JSON.stringify(blobUrl)
+            )}`
+          );
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
+      });
   };
   const onDrop = (acceptedFiles) => {
     if (uploadedFiles.length < MAX_IMAGES) {
@@ -249,12 +306,28 @@ const ConvertToJPG = () => {
                             All images will be converted to JPG.
                           </h4>
 
-                          <button className="submit-buttonn mt-80">
-                            Convert Image
-                            <FaArrowAltCircleRight
-                              style={{ marginLeft: "8px", marginBottom: "2px" }}
-                              height={22}
-                            />
+                          <button
+                            className="submit-buttonn mt-80"
+                            onClick={handleConvertToPNG}
+                            disabled={isButtonDisabled}
+                          >
+                            {showSpinner ? (
+                              <div className="button-content">
+                                <div className="button-text">Processing</div>
+                                <div className="spinner"></div>
+                              </div>
+                            ) : (
+                              <div>
+                                Convert Images{" "}
+                                <FaArrowAltCircleRight
+                                  style={{
+                                    marginLeft: "8px",
+                                    marginBottom: "2px",
+                                  }}
+                                  height={22}
+                                />
+                              </div>
+                            )}
                           </button>
                         </div>
                       </div>
@@ -342,10 +415,10 @@ const ConvertToJPG = () => {
           </div>
         </div>
         <Steps></Steps>
-       <ToJPGcontents></ToJPGcontents>
+        <ToJPGcontents></ToJPGcontents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
-       <CtaHome></CtaHome>
+        <CtaHome></CtaHome>
         <Footer></Footer>
       </div>
     </>

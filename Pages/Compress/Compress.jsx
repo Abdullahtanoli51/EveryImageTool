@@ -15,7 +15,10 @@ import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
-
+import axios from "axios";
+import FormData from "form-data";
+import fs from "fs";
+import { useNavigate } from "react-router-dom";
 
 const Compress = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -32,7 +35,10 @@ const Compress = () => {
   const MAX_IMAGES = 5;
   const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(null);
-
+  const navigate = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [issLoading, setIsLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -58,8 +64,6 @@ const Compress = () => {
       setFileTypeError(null);
 
       const newImages = images.slice(0, MAX_IMAGES - uploadedFiles.length);
-
-
     } else {
       setShowMaxImagesMessage(true); // Show the "Maximum 5 images are allowed" message
     }
@@ -141,8 +145,6 @@ const Compress = () => {
     setSelectedOption(event.target.value);
   };
 
-
-
   const handleRemove = (index) => {
     const updatedFiles = [...uploadedFiles];
     updatedFiles.splice(index, 1);
@@ -153,6 +155,66 @@ const Compress = () => {
     onDrop,
     accept: "image/*", // Only accept image files
   });
+
+  const handleCompressByPercentage = () => {
+    const newPercentage = value;
+    console.log("New value:", newPercentage);
+
+    const apiurl =
+      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/compress-images";
+    const requestdata = {
+      percentage: newPercentage,
+      images: uploadedFiles,
+    };
+
+    const data = new FormData();
+    uploadedFiles.forEach((file, index) => {
+      data.append("images[]", file, file.name);
+    });
+    if (value !== 0) {
+      // If a percentage value is provided, include it in the request
+      data.append("percentage", value);
+      console.warn("compressd value" ,value)
+    }
+
+    const config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: apiurl,
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
+
+    axios
+      .request(config)
+      .then((response) => {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
+
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          navigate(
+            `/success?tool=Compressed&response=${encodeURIComponent(
+              JSON.stringify(blobUrl)
+            )}`
+          );
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
+      });
+  };
 
   return (
     <>
@@ -263,16 +325,13 @@ const Compress = () => {
                       <div className="tab-content">
                         {activeTab === 1 && (
                           <div>
-                           
-                          <h6 className="mt-80" style={{ color: "red" ,fontSize:"14px"}}>
-                            You Can Compress The Image Aoutomatically
-                          </h6>
-
-                          
-                          <button className="submit-buttonn mt-60">
-                          Compress
-                          </button>
-                        </div>
+                            <h6
+                              className="mt-80"
+                              style={{ color: "red", fontSize: "14px" }}
+                            >
+                              You Can Compress The Image Aoutomatically
+                            </h6>
+                          </div>
                         )}
 
                         {activeTab === 2 && (
@@ -299,16 +358,27 @@ const Compress = () => {
 
                               <div className="value-indicator">{value}%</div>
                             </div>
-                            <button className="submit-buttonn mt-40">
-                          Compress
-                          </button>
                           </div>
                         )}
                       </div>
+                      <button
+                        className="submit-buttonn mt-40"
+                        onClick={handleCompressByPercentage}
+                        disabled={isButtonDisabled}
+                      >
+                        {showSpinner ? (
+                          <div className="button-content">
+                            <div className="button-text">Processing</div>
+                            <div className="spinner"></div>
+                          </div>
+                        ) : (
+                          "Compress Images"
+                        )}
+                      </button>
                     </div>
                   </div>
                 )}
-               <div className=" card-2 mb-30 mt-30">
+                <div className=" card-2 mb-30 mt-30">
                   <img src="" className="drop-img"></img>
                   <div className="uploaded-files">
                     <div className="image-grid">

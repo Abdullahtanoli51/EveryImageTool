@@ -1,20 +1,24 @@
 import React, { useEffect } from "react";
-import Header from "../../Components/header/Header";
-import gif from "../../public/img/ToolImages/successGif.gif";
-import Footer from "../../Components/Footer/Footer";
+import Header from "../Components/header/Header";
+import Footer from "../Components/Footer/Footer";
+import gif from "../public/img/ToolImages/successGif.gif"
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import ToolsHeader from "../Components/toolsheader/ToolsHeader";
 
-const Resized = (props) => {
+const SuccessPage = (props) => {
   const location = useLocation();
   const responseDataParam = new URLSearchParams(location.search).get(
     "response"
+  );
+  const tool = new URLSearchParams(location.search).get(
+    "tool"
   );
   
   const responseData = responseDataParam
     ? JSON.parse(decodeURIComponent(responseDataParam))
     : null;
-  console.warn(responseData, "resskks");
+  console.warn(responseData, "compress sucess");
   const [downloadStarted, setDownloadStarted] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(true);
   useEffect(() => {
@@ -26,7 +30,7 @@ const Resized = (props) => {
       if (!downloadStarted && responseData) {
         const downloadLink = document.createElement("a");
         downloadLink.href = responseData;
-        downloadLink.download = "resized_images.zip";
+        downloadLink.download = tool+".zip";
         downloadLink.click();
       }
     }, 2000);
@@ -47,7 +51,7 @@ const Resized = (props) => {
   return (
    
     <>
-     <Header></Header>
+     <ToolsHeader></ToolsHeader>
      <div className="H">
      
 
@@ -80,7 +84,7 @@ const Resized = (props) => {
            <div className="col-xl-8 col-lg-9 col-md-11">
              <div className="sectionHeading -light">
                <h2 className="sectionHeading__title">
-                 Your IMAGES have been resized!
+                 Your IMAGES have been {tool}
                </h2>
              </div>
            </div>
@@ -117,4 +121,4 @@ const Resized = (props) => {
   );
 };
 
-export default Resized;
+export default SuccessPage;

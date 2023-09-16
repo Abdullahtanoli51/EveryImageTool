@@ -18,6 +18,9 @@ import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
 import ToWebpContents from "./content/contents.jsx";
 import CtaHome from "../Compress/Cat/Cat";
+import axios from "axios";
+import FormData from "form-data";
+import { useNavigate } from "react-router-dom";
 
 const ConvertToWEBP = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -42,6 +45,9 @@ const ConvertToWEBP = () => {
   const MAX_IMAGES = 5;
   const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(null);
+  const navigate = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -60,6 +66,59 @@ const ConvertToWEBP = () => {
       link.click();
       document.body.removeChild(link);
     }
+  };
+  const Format = "webp";
+  const handleConvertToWEBP = () => {
+    const apiurl =
+      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/convert-from-jpg";
+    const requestdata = {
+      images: uploadedFiles,
+    };
+
+    const data = new FormData();
+    uploadedFiles.forEach((file, index) => {
+      data.append("images[]", file, file.name);
+    });
+    data.append("format", Format);
+    console.warn("Format value", Format);
+
+    const config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: apiurl,
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
+
+    axios
+      .request(config)
+      .then((response) => {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
+
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          navigate(
+            `/success?tool=Converted&response=${encodeURIComponent(
+              JSON.stringify(blobUrl)
+            )}`
+          );
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
+      });
   };
   const handleUploadImages = (images) => {
     if (uploadedFiles.length < MAX_IMAGES) {
@@ -256,13 +315,29 @@ const ConvertToWEBP = () => {
                         </h4>
 
                        
-                        <button className="submit-buttonn mt-80">
-                          Convert Image
-                          <FaArrowAltCircleRight
-                            style={{ marginLeft: "8px", marginBottom: "2px" }}
-                            height={22}
-                          />
-                        </button>
+                        <button
+                            className="submit-buttonn mt-60"
+                            onClick={handleConvertToWEBP}
+                            disabled={isButtonDisabled}
+                          >
+                            {showSpinner ? (
+                              <div className="button-content">
+                                <div className="button-text">Processing</div>
+                                <div className="spinner"></div>
+                              </div>
+                            ) : (
+                              <div>
+                                Convert Images
+                                <FaArrowAltCircleRight
+                                  style={{
+                                    marginLeft: "8px",
+                                    marginBottom: "2px",
+                                  }}
+                                  height={22}
+                                />
+                              </div>
+                            )}
+                          </button>
                       </div>
 
                      

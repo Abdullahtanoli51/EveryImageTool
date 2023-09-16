@@ -17,6 +17,9 @@ import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
 import WaterMarkcontents from "./content/contents.jsx";
 import CtaHome from "../Compress/Cat/Cat";
+import axios from "axios";
+import FormData from "form-data";
+import { useNavigate } from "react-router-dom";
 
 const WaterMark = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -28,11 +31,16 @@ const WaterMark = () => {
   const [uploadingIndex, setUploadingIndex] = useState(null); // Track the uploading image index
   const [loadingStates, setLoadingStates] = useState([]);
   const colorOptions = ["#FF5733", "#FFC300", "#0088FF", "#AA33FF", "#FF33AA"];
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("");
   const [selectedOption, setSelectedOption] = useState(""); // Default value
   const MAX_IMAGES = 5;
   const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(null);
+  const navigate = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [selectedText, setSelectedText] = useState(""); // To store the selected tex
+const [opacityPercentage, setOpacityPercentage] = useState(0); // To store the opacity percentage
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -51,6 +59,66 @@ const WaterMark = () => {
       link.click();
       document.body.removeChild(link);
     }
+  };
+  const handleWaterMark = () => {
+    const apiurl =
+      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/watermark";
+      const requestdata = {
+        images: uploadedFiles,
+        text: selectedText,
+        color: selectedColor,
+        opacity: value,
+      };
+      console.warn(selectedText,"selectedText")
+      console.warn(selectedColor,"selectedColor")
+      console.warn(selectedText,"selectedText")
+      console.warn(value,"value")
+    const data = new FormData();
+    uploadedFiles.forEach((file, index) => {
+      data.append("images[]", file, file.name);
+    });
+    Object.keys(requestdata).forEach((key) => {
+      data.append(key, requestdata[key]);
+    });
+   
+
+    const config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: apiurl,
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
+
+    axios
+      .request(config)
+      .then((response) => {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
+
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          navigate(
+            `/success?tool=Converted&response=${encodeURIComponent(
+              JSON.stringify(blobUrl)
+            )}`
+          );
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
+      });
   };
   const handleUploadImages = (images) => {
     if (uploadedFiles.length < MAX_IMAGES) {
@@ -269,6 +337,8 @@ const WaterMark = () => {
                                 className="custom-input mb-3"
                                 placeholder="Enter text here"
                                 style={{ border: "1px solid #5A13B5" }}
+                                value={selectedText} // Bind the selectedText state variable to the input value
+                                onChange={(e) => setSelectedText(e.target.value)} // Update selectedText when input changes
                               />
 
                               <h4 className="testimonials__title text-xl fw-700 text-dark-1 ">
@@ -282,8 +352,8 @@ const WaterMark = () => {
                                   onChange={handleOptionChange}
                                 >
                                   <option value="option1">Choose..</option>
-                                  <option value="option2">Single</option>
-                                  <option value="option3">Multiple</option>
+                                  <option value="single">Single</option>
+                                  <option value="multiple">Multiple</option>
                                 </select>
                                 <div className="custom-dropdown1-icon">
                                   <FaCaretDown></FaCaretDown>
@@ -334,7 +404,8 @@ const WaterMark = () => {
                                   <div
                                     key={index}
                                     className="nav__item -right ml-10 js-next"
-                                    onClick={() => handleColorClick(color)}
+                                    onClick={() => setSelectedColor(color)} // Update selectedColor when a color is clicked
+
                                     style={{
                                       backgroundColor: color,
                                       borderRadius: "50%",
@@ -369,15 +440,36 @@ const WaterMark = () => {
                                   onChange={(e) =>
                                     setValue(parseInt(e.target.value))
                                   }
+                                  
                                   className="custom-sliderrr"
                                 />
 
                                 <div className="value-indicator">{value}%</div>
                               </div>
                             </div>
-                            <button className="submit-buttonn mt-20 sm:mb-0   ">
-                              Add Water mark
-                            </button>
+                            <button
+                            className="submit-buttonn mt-60"
+                            onClick={handleWaterMark}
+                            disabled={isButtonDisabled}
+                          >
+                            {showSpinner ? (
+                              <div className="button-content">
+                                <div className="button-text">Processing</div>
+                                <div className="spinner"></div>
+                              </div>
+                            ) : (
+                              <div>
+                                Convert Images
+                                <FaArrowAltCircleRight
+                                  style={{
+                                    marginLeft: "8px",
+                                    marginBottom: "2px",
+                                  }}
+                                  height={22}
+                                />
+                              </div>
+                            )}
+                          </button>
                           </div>
                         )}
 

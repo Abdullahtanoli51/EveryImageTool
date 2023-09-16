@@ -18,6 +18,10 @@ import { BiSolidImageAdd } from "react-icons/bi";
 import { FaArrowAltCircleRight, FaCaretDown } from "react-icons/fa";
 import FromJpgContents from "./content/contents.jsx";
 import CtaHome from "../Compress/Cat/Cat";
+import axios from "axios";
+import FormData from "form-data";
+import fs from "fs";
+import { useNavigate } from "react-router-dom";
 
 const ConvertFromJPG = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -42,6 +46,10 @@ const ConvertFromJPG = () => {
   const MAX_IMAGES = 5;
   const [showMaxImagesMessage, setShowMaxImagesMessage] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(null);
+  const navigate = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [issLoading, setIsLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -73,6 +81,66 @@ const ConvertFromJPG = () => {
       // Handle the case where the user selects more images than allowed
       setShowMaxImagesMessage(true); // Show the "Maximum 5 images are allowed" message
     }
+  };
+  const handleConvertFromJPG = () => {
+   
+   
+    const selectedOptionValue = document.getElementById("mySelect").value; // Get the selected option value from the <select> element
+    const Format = selectedOptionValue;
+    console.log("New value:", Format);
+    const apiurl =
+      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/convert-from-jpg";
+    const requestdata = {
+      images: uploadedFiles,
+      selectedOption: selectedOptionValue,
+    };
+
+    const data = new FormData();
+    uploadedFiles.forEach((file, index) => {
+      data.append("images[]", file, file.name);
+    });
+
+    // If a percentage value is provided, include it in the request
+    data.append("format", Format);
+    console.warn("Format value", Format);
+
+    const config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: apiurl,
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
+
+    axios
+      .request(config)
+      .then((response) => {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
+
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          navigate(
+            `/success?tool=Converted &response=${encodeURIComponent(
+              JSON.stringify(blobUrl)
+            )}`
+          );
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
+      });
   };
 
   const onDrop = (acceptedFiles) => {
@@ -162,7 +230,6 @@ const ConvertFromJPG = () => {
     onDrop,
     accept: "image/*", // Only accept image files
   });
-
 
   return (
     <>
@@ -257,21 +324,38 @@ const ConvertFromJPG = () => {
 
                           <div className="custom-dropdown-container">
                             <select className="custom-dropdown" id="mySelect">
-                              <option value="option1">Choose ...</option>
-                              <option value="option2">Convert To PNG</option>
-                              <option value="option3">Convert To WEBP</option>
+                              <option value="">Choose ...</option>
+                              <option value="png">Convert To PNG</option>
+                              <option value="webp">Convert To WEBP</option>
+                              <option value="gif">Convert To GIF</option>
                             </select>
                             <div className="custom-dropdown-icon">
                               <FaCaretDown></FaCaretDown>
                             </div>
                           </div>
 
-                          <button className="submit-buttonn mt-60">
-                            Convert Image
-                            <FaArrowAltCircleRight
-                              style={{ marginLeft: "8px", marginBottom: "2px" }}
-                              height={22}
-                            />
+                          <button
+                            className="submit-buttonn mt-60"
+                            onClick={handleConvertFromJPG}
+                            disabled={isButtonDisabled}
+                          >
+                            {showSpinner ? (
+                              <div className="button-content">
+                                <div className="button-text">Processing</div>
+                                <div className="spinner"></div>
+                              </div>
+                            ) : (
+                              <div>
+                                Convert Images
+                                <FaArrowAltCircleRight
+                                  style={{
+                                    marginLeft: "8px",
+                                    marginBottom: "2px",
+                                  }}
+                                  height={22}
+                                />
+                              </div>
+                            )}
                           </button>
                         </div>
                       </div>
@@ -359,7 +443,7 @@ const ConvertFromJPG = () => {
           </div>
         </div>
         <Steps></Steps>
-       <FromJpgContents></FromJpgContents>
+        <FromJpgContents></FromJpgContents>
         <ExploreTools></ExploreTools>
         <FaqTwo></FaqTwo>
         <CtaHome></CtaHome>

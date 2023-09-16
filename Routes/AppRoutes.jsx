@@ -25,6 +25,8 @@ import ConvertToPNG from '../Pages/Convert-to-PNG/Convert-to-PNG';
 import ConvertToWEBP from '../Pages/Convert-to-WEBP/Convert-to-WEBP';
 import Replacebackground from '../Pages/Replace-Background/ReplaceBackground';
 import Resized from '../Pages/Resize/AfterResize';
+import CompressSuccessPage from '../Pages/Success';
+import SuccessPage from '../Pages/Success';
 
 
 
@@ -58,7 +60,7 @@ const AppRoutes = () => {
         <Route path='convert-to-png' element={<ConvertToPNG></ConvertToPNG>}></Route>
         <Route path='/convert-to-webp' element={<ConvertToWEBP></ConvertToWEBP>}></Route>
         <Route path='/replace-background' element={<Replacebackground></Replacebackground>}></Route>
-        <Route path='/resized' element={<Resized></Resized>}></Route>
+        <Route path='/success' element={<SuccessPage></SuccessPage>}></Route>
     </Routes>
     </BrowserRouter>
   

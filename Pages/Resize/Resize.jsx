@@ -2,27 +2,20 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "./Resize.scss"; // Import the stylesheet
-import RangeSlider from "react-bootstrap-range-slider";
 import LoadingSpinner from "../../Components/LoadingSpinner/LoadingSpinner";
-import CreativeProcessOne from "../Home/creativeProcess/CreativeProcess";
 import Steps from "./Steps/Steps";
-import Compresscontents from "./content/contents.jsx";
 import ExploreTools from "./ExploreTools/ExploreTools";
 import FaqTwo from "./FAQ/Faq";
-import Cta from "./Cat/Cat";
 import Footer from "../../Components/Footer/Footer";
 import ToolsHeader from "../../Components/toolsheader/ToolsHeader";
 import { useEffect } from "react";
-import { Tabs } from "react-bootstrap";
 import { BiSolidImageAdd } from "react-icons/bi";
 import CtaHome from "../Compress/Cat/Cat";
 import Resizercontents from "./content/contents.jsx";
-
 import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
 import { useNavigate } from "react-router-dom";
-
 const Resize = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
@@ -45,7 +38,9 @@ const Resize = () => {
   const [fileTypeError, setFileTypeError] = useState(null);
   const [images, setimage] = useState([]);
   const navigate = useNavigate();
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [issLoading, setIsLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
   const handleAspectRatioChange = () => {
     setAspectRatioMaintained(!aspectRatioMaintained);
   };
@@ -95,24 +90,19 @@ const Resize = () => {
   const handlePixelWidthChange = (e) => {
     let newWidthValue = e.target.value;
     // Limit the input to four characters
-  
-      if (newWidthValue.length > 4) {
-        newWidthValue = newWidthValue.slice(0, 4);
-      }
-      setNewPixelWidth(newWidthValue);
 
-      if (
-        !isNaN(newWidthValue) &&
-        newWidthValue >= 0 &&
-        newWidthValue <= 9999
-      ) {
-        const newHeightValue = aspectRatioMaintained
-          ? Math.round((newWidthValue / imageWidth) * imageHeight)
-          : newPixelHeight;
+    if (newWidthValue.length > 4) {
+      newWidthValue = newWidthValue.slice(0, 4);
+    }
+    setNewPixelWidth(newWidthValue);
 
-        setNewPixelHeight(newHeightValue);
-      }
-    
+    if (!isNaN(newWidthValue) && newWidthValue >= 0 && newWidthValue <= 9999) {
+      const newHeightValue = aspectRatioMaintained
+        ? Math.round((newWidthValue / imageWidth) * imageHeight)
+        : newPixelHeight;
+
+      setNewPixelHeight(newHeightValue);
+    }
   };
   const handlePixelHeightChange = (e) => {
     let newHeightValue = e.target.value;
@@ -137,41 +127,66 @@ const Resize = () => {
     }
   };
   const handleResizeByPercentage = () => {
-    const newWidth = Math.round(imageWidth * (value / 100));
+    const newPercentage = value;
+    const newWidth =(imageWidth * (value / 100));
     const newHeight = Math.round(imageHeight * (value / 100));
-    const images = uploadedFiles;
-    console.log(images);
-    const apiurl =
-      "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/resize-images";
+    console.log("New value:", newPercentage);
+  
+
+  
+    const apiurl = "https://phplaravel-1026751-3882835.cloudwaysapps.com/api/batch/resize/percentage";
     const requestdata = {
-      width: newWidth,
-      height: newHeight,
+      percentage: newPercentage,
       images: uploadedFiles,
     };
-    fetch(apiurl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "Application/json",
-      },
-      body: JSON.stringify(requestdata),
-    })
-      .then((response) => {
-        if (response.ok) {
-          throw new Error("Network response is Not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("API Response:", data);
-      })
-      .catch((error) => {
-        console.error("Api Error ", error);
-      });
-
+  
     setImageWidth(newWidth);
     setImageHeight(newHeight);
-    Navigate("/resized");
+  
+    const data = new FormData();
+    uploadedFiles.forEach((file, index) => {
+      data.append("images[]", file, file.name);
+    });
+    data.append("percentage", newPercentage);
+   
+  
+    const config = {
+      method: "POST",
+      maxBodyLength: Infinity,
+      url: apiurl,
+      data: data,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+  
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
+  
+    axios
+      .request(config)
+      .then((response) => {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
+  
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+  
+          navigate(`/success?tool=Resized&response=${encodeURIComponent(JSON.stringify(blobUrl))}`);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
+      });
   };
+  
+
+  
 
   const handleResizeByPixel = () => {
     setImageWidth(newWidth);
@@ -180,7 +195,6 @@ const Resize = () => {
     let data = new FormData();
 
     uploadedFiles.forEach((file, index) => {
-      // Append each image to the FormData
       data.append("images[]", file, file.name);
     });
 
@@ -200,45 +214,30 @@ const Resize = () => {
         "Content-Type": "multipart/form-data",
       },
     };
-
+    setIsButtonDisabled(true);
+    setShowSpinner(true);
     axios
       .request(config)
       .then((response) => {
-        // console.log(JSON.stringify(response.data));
+       
 
-        // Create a download link element
-        // const downloadLink = document.createElement('a');
-        // downloadLink.href = 'data:application/zip;base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(response.data)));
-        // downloadLink.download = 'resized_images.zip'; // Specify the desired file name
+        setTimeout(() => {
+          setShowSpinner(false);
+          setIsButtonDisabled(false);
 
-        // // Programmatically trigger the click event to initiate the download
-        // downloadLink.click();
-        const responseData = response.data;
-
-      // Use the React Router navigate hook to navigate to the /resized page
-
-      navigate('/resized', {responseData:"string"  });
-        // Create a Blob from the response data with the correct MIME type
-        const blob = new Blob([response.data], { type: "application/zip" });
-
-        // Create a URL for the Blob
-        const blobUrl = window.URL.createObjectURL(blob);
-
-        // Create a download link element
-        const downloadLink = document.createElement("a");
-        downloadLink.href = blobUrl;
-        downloadLink.download = "resized_images.zip"; // Specify the desired file name
-
-        // Programmatically trigger the click event to initiate the download
-        downloadLink.click();
-
-        // Clean up the URL and Blob
-        window.URL.revokeObjectURL(blobUrl);
+          const responseData = response.data;
+          const blob = new Blob([response.data], { type: "application/zip" });
+          const blobUrl = window.URL.createObjectURL(blob);
+          navigate(
+            `/resized?response=${encodeURIComponent(JSON.stringify(blobUrl))}`
+          );
+        }, 2000);
       })
       .catch((error) => {
         console.log(error);
+        setShowSpinner(false);
+        setIsButtonDisabled(false);
       });
-     
   };
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -436,7 +435,7 @@ const Resize = () => {
                                   onClick={() => handleTabClick(1)}
                                   type="button"
                                 >
-                                  By Percentage
+                                  Percentage
                                 </button>
                               </div>
                               <div className="col-md">
@@ -447,7 +446,7 @@ const Resize = () => {
                                   onClick={() => handleTabClick(2)}
                                   type="button"
                                 >
-                                  By Pixels
+                                   Pixels
                                 </button>
                               </div>
                             </div>
@@ -487,11 +486,19 @@ const Resize = () => {
                                 {newWidth}px x {newHeight}px
                               </div>
                             )}
-                            <button
-                              className="submit-buttonn mt-50"
-                              onClick={handleResizeByPixel}
+                              <button
+                              className="submit-buttonn"
+                              onClick={handleResizeByPercentage}
+                              disabled={isButtonDisabled}
                             >
-                              Resize
+                              {showSpinner ? (
+                                <div className="button-content">
+                                  <div className="button-text">Processing</div>
+                                  <div className="spinner"></div>
+                                </div>
+                              ) : (
+                                "Resize Images"
+                              )}
                             </button>
                           </div>
                         )}
@@ -541,8 +548,16 @@ const Resize = () => {
                             <button
                               className="submit-buttonn"
                               onClick={handleResizeByPixel}
+                              disabled={isButtonDisabled}
                             >
-                              Submit
+                              {showSpinner ? (
+                                <div className="button-content">
+                                  <div className="button-text">Processing</div>
+                                  <div className="spinner"></div>
+                                </div>
+                              ) : (
+                                "Resize Images"
+                              )}
                             </button>
                           </div>
                         )}
